@@ -7,3 +7,4 @@ tzdata==2025.3
 djangorestframework
 django-filter
 django-cors-headers
+django-autoslug
