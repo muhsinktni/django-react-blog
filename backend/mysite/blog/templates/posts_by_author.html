@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Posts by {{ author.name }}
+    {%if author.place %}
+    {{ author.place}}
+    {% endif %}
+</h2>
+
+{% for post in posts %}
+    <div class="card mb-3 p-3 shadow-sm">
+        <h3>{{ post.title }}</h3>
+        <p>{{ post.content|truncatechars:200 }}</p>
+        <p class="text-muted">{{ post.published_date|date:"F j, Y"}}</p>
+    </div>
+    {% empty %}
+    <p>No posts found for this author.</p>
+{% endfor %}
+
+<a href="{% url 'home' %}">Back to Home </a>
+{% endblock %}

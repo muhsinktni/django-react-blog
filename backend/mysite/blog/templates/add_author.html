@@ -1,0 +1,6 @@
+<h2>Add an Author here</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-success">Save as an author</button>
+</form>

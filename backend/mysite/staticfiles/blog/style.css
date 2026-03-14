@@ -1,0 +1,58 @@
+body {
+    background-color: #f4f4f4;
+    font-family: Arial, sans-serif;
+}
+
+header {
+    background-color: #0078d7;
+    color: white;
+    padding: 10px;
+    text-align: center;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    margin: 0 10px;
+}
+
+main {
+    margin: 20px;
+}
+
+footer {
+    background-color: #ddd;
+    padding: 10px;
+    text-align: center;
+}
+/* for coloring each cards odd and even */
+.post-box:nth-child(odd) {
+    background-color: #54d448;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.post-box:nth-child(even) {
+    background-color: #ddc133;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+/* hover effect for each post card */
+
+/* ---------- POST HOVER EFFECT ---------- */
+.post-card {
+    transition: all 0.3s ease;
+    border-radius: 8px;
+}
+
+/* Hover animation */
+.post-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+}
+
+

@@ -1,0 +1,94 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}My website{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'blog/style.css' %}">
+</head>
+<body>
+    <header>
+        <h1> My django site</h1>
+        <nav>
+            <a href="/">Home</a> |
+            <a href="/about/">About</a> |
+            <a href="/contact/">Contact</a>|
+            <a href="/admin/">Go to Admin Panel</a>
+            {% if user.is_authenticated %}
+                <p>Welcome, {{ user.username }}! </p>
+                <form action="{% url 'logout' %}" method="post" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit">Logout</button>
+                    </form>
+            {% else %}
+                | <a href="{% url 'login' %}">Login</a>
+            {% endif %}
+
+            <form method="GET" action="/">
+                <input type="text" name="q" placeholder="search..." value="{{ query }}">
+                <button type="submit"> Search </button>
+            </form>
+        </nav>
+        <hr>
+    </header>
+
+    <main>
+        {% block content %}
+
+        {% endblock %}
+    </main>
+
+    <hr>
+    <footer>
+        <p>All rights reserved - Muhsin </p>
+    </footer>
+    <script src="{% static 'blog/script.js' %}"></script>
+    
+    {% block scripts %}
+    <script>
+        const searchInput = document.querySelector("input[name='q']");
+        const resultBox = document.createElement("div");
+
+
+        resultBox.style.position = "absolute";
+        resultBox.style.background = "white";
+        resultBox.style.border = "1px solid #ccc";
+        resultBox.style.width = "200px";
+        resultBox.style.display = "none";
+
+        document.body.appendChild(resultBox);
+
+        searchInput.addEventListener("input", function () {
+            let q = this.value.trim();
+
+            if (q.length < 2) {
+                resultBox.style.display = "none";
+                return;
+            }
+            const rect = searchInput.getBoundingClientRect();
+            resultBox.style.left = rect.left + "px";
+            resultBox.style.top = rect.bottom + "px";
+
+
+            fetch(`/ajax/search/?q=${q}`)
+                .then(res => res.json())
+                .then(data => {
+                    let html = "";
+                    
+                    data.results.forEach(item => {
+                        html += `<div style="padding: 5px;">
+                                    <a href="/post/${item.slug}/">${item.title}</a>
+                                </div>`;
+                    });
+
+                    resultBox.innerHTML = html;
+                    resultBox.style.display = html ? "block" : "none";
+        });
+
+    });
+</script>
+{% endblock %}
+    
+</body>
+
+
+</html>

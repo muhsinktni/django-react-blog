@@ -1,0 +1,126 @@
+{% extends 'base.html' %} {% block content %}
+
+<h1>{{ post.title }}</h1>
+<p>{{ post.content }}</p>
+<p>Reading Time: {{ post.read_time }} minutes...</p>
+
+<h3>Leave a comment</h3>
+<!-- <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Submit</button>
+ </form> -->
+{% if user.is_authenticated %}
+<form id="commentForm">
+  {% csrf_token %}
+  <input type="hidden" name="post_id" value="{{ post.id }}" /><br />
+  <textarea
+    id="comment-text"
+    name="content"
+    placeholder="Write comment..."
+  ></textarea
+  ><br /><br />
+
+  <button type="submit">Post comment</button>
+</form>
+{% else %}
+<p><a href="{% url 'login' %}">Login</a> to leave a comment.</p>
+{% endif %}
+<h3>Comments</h3>
+<!-- {% for comment in post.comments.all %}
+    <div style="margin-bottom: 10px;">
+        <strong>{{ comment.name }}</strong>
+        <small>{{ comment.created_at }}</small>
+        <p>{{ comment.content }}</p>
+    </div>
+{% empty %}
+    <p>No comments yet. Be the first!</p>
+
+{% endfor %} -->
+
+<div id="comments">
+{% for comment in comments %}
+    {% if comment.is_approved %}
+    
+    <!-- Parent comment -->
+    <div style="margin-left: 0">
+        <p>
+            <strong>{{ comment.user.username }}</strong><br />
+            {{ comment.content }}
+        </p>
+    </div>
+
+    <!-- Replies -->
+    {% for reply in comment.replies.all %}
+        {% if reply.is_approved %}
+        <div style="margin-left: 20px; margin-top: 10px">
+            <p>
+                <strong>{{ reply.user.username }}</strong><br />
+                {{ reply.content }}
+            </p>
+        </div>
+        {% endif %}
+    {% endfor %}
+
+    <!-- Reply form -->
+     <button type="button" onclick="toggleReplyForm('{{ comment.id }}')">
+    Reply
+</button>
+
+<form id="reply-form-{{ comment.id }}"
+      action="{% url 'add_comment' %}"
+      method="post"
+      style="display:none; margin-left:20px;">
+    
+        {% csrf_token %}
+        <input type="hidden" name="post_id" value="{{ post.id }}" />
+        <input type="hidden" name="parent_id" value="{{ comment.id }}" />
+        <textarea name="content" placeholder="Write a reply..."></textarea><br />
+        <button type="submit">Reply</button>
+    </form>
+
+    {% endif %}
+
+{% empty %}
+  <p>No comments yet</p>
+
+{% endfor %}
+</div>
+  <script>
+    const form = document.getElementById("commentForm");
+
+    if (form) {
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        let formData = new FormData(form);
+
+        fetch("{% url 'ajax_comment' %}", {
+          method: "POST",
+          body: formData,
+          headers: {
+            "X-Requested-With": "XMLHttpRequest",
+          },
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.error) {
+              alert(data.error);
+              return;
+            }
+
+            location.reload();
+          });
+      });
+    }
+// for reply button working
+    function toggleReplyForm(id) {
+    const form = document.getElementById(`reply-form-${id}`);
+    if (!form) return;
+    form.style.display = form.style.display === "none" ? "block" : "none";
+}
+
+  </script>
+
+  {% endblock %}
+</div>
