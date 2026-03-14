@@ -1,0 +1,29 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+#mainHead {
+  text-align: center;
+  color: darkblue;
+  padding: 1rem;
+  background-color: goldenrod;
+  width: 100%;
+  margin: 0 auto;
+}
+
+#mainFoot {
+  text-align: center;
+  font-weight: bold;
+  padding: 1rem;
+  color: yellow;
+  background-color: rgba(7, 41, 85, 0.589);
+  width: 100%;
+  margin: 0 auto;
+}
+
+.content {
+  flex: 1;
+  width: 100%;
+}
