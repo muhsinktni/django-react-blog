@@ -4,3 +4,6 @@ gunicorn==25.1.0
 packaging==26.0
 sqlparse==0.5.5
 tzdata==2025.3
+djangorestframework
+django-filter
+django-cors-headers
